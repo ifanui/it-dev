@@ -11,4 +11,9 @@
 -----------------------------------------------------------------
 - Create inventories for installing applications by ansible.
 - Create roles [pmp](https://github.com/ifanui/it-dev/tree/master/ansible/pmp), [jump](https://github.com/ifanui/it-dev/tree/master/ansible/jump) and [jenkins](https://github.com/ifanui/it-dev/tree/master/ansible/jenkins).
-
+-----------------------------------------------------------------
+##### My IT resources on AWS
+----------------------------
+>AWS
+![](https://github.com/ifanui/it-dev/blob/master/images/aws.pdf)
+-----------------------------------------------------------------
