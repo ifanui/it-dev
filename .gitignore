@@ -3,3 +3,4 @@ terraform/modules/vpc/.terraform
 *.log
 terraform.tfstate
 terraform.tfstate.*
+terraform/modules/jenkins/.terraform/
