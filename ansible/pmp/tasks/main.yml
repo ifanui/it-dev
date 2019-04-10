@@ -1,0 +1,72 @@
+---
+# tasks file for pmp
+- name: Download Password Manager Pro bin
+  get_url:
+    url: "{{ url_pmp }}"
+    dest: "{{ home_dir }}/pmp.bin"
+    mode: 0777
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+- name: Install requiments for Password Manager Pro
+  apt:
+    name: "{{ apt_pkg }}" 
+- name: Install PMP silent
+  become: false
+  shell: ./pmp.bin -i silent
+  args:
+    chdir: "{{ home_dir }}/"
+- name: Copy a pmp-service to init.d
+  shell: "bash pmp.sh install"
+  args:
+    chdir: "{{ PMP_Home }}/"
+  register: command_result
+  failed_when: "'FAILED' in command_result.stderr"
+#  ignore_errors: True 
+- name: To Start PMP as a service
+  tags: start_service
+  become: false
+  shell: "bash pmp-service start"
+  args:
+    chdir: "/etc/init.d/"  
+- name: Install consul
+  unarchive:
+    src: "{{ cons_url }}"
+    dest: /usr/local/bin
+    remote_src: yes
+- name: Create consul user
+  user:
+    name: consul
+- name: Create Consul /var directory
+  file:
+    path: /var/consul
+    state: directory
+    owner: consul
+    group: consul
+    mode: 0755
+- name: Create Consul config directory
+  file:
+    path: /etc/consul.d/config
+    state: directory
+    mode: 0755 
+- name: Copy configuration file
+  copy:
+    src: config.json
+    dest: /etc/consul.d/config/config.json
+- name: Copy systemd consul.service
+  copy:
+    src: consul.service
+    dest: /etc/systemd/system/consul.service
+- name: Start consul service
+  systemd:
+    name: consul.service
+    state: started
+- name: add repo for java 8
+  apt_repository: repo='ppa:webupd8team/java'  state=present
+- name: set licence selected
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+- name: set licence seen
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections
+- name: install java 8
+  apt: name=oracle-java8-installer state=latest update-cache=yes force=yes
+

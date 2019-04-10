@@ -1,0 +1,32 @@
+{
+ "bind_addr": "{{ GetPrivateIP }}",
+ "datacenter": "Dev",
+ "data_dir": "/var/consul",
+ "log_level": "INFO",
+ "node_name": "PMP", 
+ "enable_syslog": true,
+ "enable_local_script_checks": true,
+ "enable_debug": true,
+ "server": false,
+ "retry_join": [
+    "10.10.20.10"
+    ],
+ "check": {
+    "id": "ssh",
+    "name": "SSH TCP on port 22",
+    "tcp": "localhost:22",
+    "interval": "10s",
+    "timeout": "1s"
+  },
+ "services": [{
+    "name": "PMP",
+    "port": 7272,
+    "address": "",
+    "checks": [{
+      "id": "PMP-status",
+      "http": "https://127.0.0.1:7272",
+      "tls_skip_verify": true,	
+      "interval": "15s"
+    }]
+  }]
+ } 

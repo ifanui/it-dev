@@ -1,0 +1,95 @@
+---
+# tasks file for jenkins
+- name: Install requirements for Jenkins
+  apt:
+    name: "{{ packages }}"
+- name: Add user for jenkins
+  user:
+    name: jenkins
+    shell: /bin/bash
+    home: /home/jenkins
+- name: Add repository .ssh
+  file:
+    path: "/home/jenkins/.ssh/"
+    state: directory
+    owner: jenkins
+    group: jenkins
+- name: Copy private ssh key for jenkins user
+  copy:
+    src: "~/.ssh/id_rsa"
+    dest: /home/jenkins/.ssh/
+    mode: 0600
+    owner: jenkins
+    group: jenkins
+- name: Copy public ssh key for jenkins user
+  copy:
+    src: "~/.ssh/id_rsa.pub"
+    dest: /home/jenkins/.ssh/authorized_keys
+    owner: jenkins
+    group: jenkins
+    mode: 0644
+- name: Install consul
+  unarchive:
+    src: "{{ cons_url }}"
+    dest: /usr/local/bin
+    remote_src: yes
+- name: Create consul user
+  user:
+    name: consul
+- name: Create Consul /var directory
+  file:
+    path: /var/consul
+    state: directory
+    owner: consul
+    group: consul
+    mode: 0755
+- name: Create Consul config directory
+  file:
+    path: /etc/consul.d/config
+    state: directory
+    mode: 0755
+- name: Copy configuration file
+  copy:
+    src: config.json
+    dest: /etc/consul.d/config/config.json
+- name: Copy systemd consul.service
+  copy:
+    src: consul.service
+    dest: /etc/systemd/system/consul.service
+- name: Start consul service
+  systemd:
+    name: consul.service
+    state: started
+- name: add repo for java 8
+  apt_repository: repo='ppa:webupd8team/java'  state=present
+- name: set licence selected
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+- name: set licence seen
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections
+- name: install java 8
+  apt: name=oracle-java8-installer state=latest update-cache=yes force=yes
+- name: add the repository key to the system
+  shell: "wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -"
+  args:
+    warn: False
+- name: append the Debian package repository address to the server's
+  apt_repository:
+    repo: deb https://pkg.jenkins.io/debian-stable binary/
+    state: present
+- name: Apt update
+  apt:
+    update_cache: yes
+- name: Install Jenkins
+  apt:
+    name: "{{ apt_packages }}"
+- name: Check Start Jenkins
+  wait_for:
+    path: /var/lib/jenkins/secrets/initialAdminPassword
+    delay: 10
+    timeout: 120
+- name: show initialAdminPassword
+  shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+  register: pass
+- name: show pass
+  debug:    
+    var: pass.stdout_lines

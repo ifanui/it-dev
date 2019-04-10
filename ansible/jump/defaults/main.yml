@@ -1,0 +1,9 @@
+---
+# defaults file for jump
+cons_url: https://releases.hashicorp.com/consul/1.4.4/consul_1.4.4_linux_amd64.zip
+sites_centos: "/etc/nginx/conf.d"
+yum_pkg:
+ - unzip
+ - wget
+ - curl
+ - nginx

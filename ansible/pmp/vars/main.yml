@@ -1,0 +1,12 @@
+---
+# vars file for pmp
+PMP_Home: /home/ubuntu/ManageEngine/PMP/bin
+url_pmp: http://archives.manageengine.com/passwordmanagerpro/9500/ManageEngine_PMP_64bit.bin
+
+home_dir: /home/ubuntu
+
+apt_pkg:
+  - mc
+  - unzip
+  - vim
+

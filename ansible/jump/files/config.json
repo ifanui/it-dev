@@ -1,0 +1,43 @@
+{
+ "advertise_addr": "{{ GetPrivateIP }}",
+ "datacenter": "Dev",
+ "data_dir": "/var/consul",
+ "log_level": "DEBUG",
+ "node_name": "DC",
+ "enable_syslog": true,
+ "enable_local_script_checks": true,
+ "enable_debug": true,
+ "ui": true,
+ "bind_addr" : "0.0.0.0",
+ "bootstrap_expect" : 1,
+ "client_addr": "0.0.0.0",
+ "server": true,
+ "check": {
+    "id": "ssh",
+    "name": "SSH TCP on port 22",
+    "tcp": "localhost:22",
+    "interval": "10s",
+    "timeout": "1s"
+  },
+ "services": [{
+    "name": "Nginx",
+    "port": 80,
+    "address": "",
+    "checks": [{
+      "id": "Nginx-status",
+      "http": "http://127.0.0.1",
+      "interval": "15s"
+    }]
+  },
+    {
+    "name": "SSL",
+    "port": 443,
+    "address": "",
+    "checks": [{
+      "id": "SSL-status",
+      "http": "https://127.0.0.1",
+      "tls_skip_verify": true,
+      "interval": "15s"
+    }]
+  }] 
+ } 

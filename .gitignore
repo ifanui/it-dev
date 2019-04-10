@@ -1,0 +1,5 @@
+terraform/prod/.terraform
+terraform/modules/vpc/.terraform
+*.log
+terraform.tfstate
+terraform.tfstate.*

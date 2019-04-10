@@ -1,0 +1,13 @@
+---
+  - hosts: pmp
+    become: yes
+    roles:
+      - pmp
+  - hosts: jump
+    become: yes
+    roles:
+      - jump
+  - hosts: jenkins
+    become: yes
+    roles:
+      - jenkins

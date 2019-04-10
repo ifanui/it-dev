@@ -1,0 +1,12 @@
+---
+all:
+  hosts:
+    pmp:
+      ansible_host: 10.10.20.5
+      ansible_user: ubuntu
+    jump:
+      ansible_host: 35.180.199.181
+      ansible_user: centos
+    jenkins:
+      ansible_host: 10.10.20.9
+      ansible_user: ubuntu

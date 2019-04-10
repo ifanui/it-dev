@@ -1,0 +1,12 @@
+---
+# defaults file for pmp
+cons_url: https://releases.hashicorp.com/consul/1.4.4/consul_1.4.4_linux_amd64.zip
+url_pmp: http://archives.manageengine.com/passwordmanagerpro/9500/ManageEngine_PMP_64bit.bin
+home_dir: /home/ubuntu
+apt_pkg:
+  - mc
+  - vim
+  - unzip
+  - curl
+  - nano
+PMP_Home: /home/ubuntu/ManageEngine/PMP/bin

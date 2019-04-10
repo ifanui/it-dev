@@ -1,0 +1,13 @@
+---
+# defaults file for jenkins
+cons_url: https://releases.hashicorp.com/consul/1.4.4/consul_1.4.4_linux_amd64.zip
+packages:
+  - openjdk-8-jre-headless
+  - wget
+  - git
+  - unzip
+apt: https://pkg.jenkins.io/debian-stable
+apt_packages:
+  - mc
+  - jenkins
+  - nano

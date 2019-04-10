@@ -1,0 +1,67 @@
+---
+# tasks file for jump
+- name: Install requiments for Consul
+  yum:
+    name: "{{ yum_pkg }}"
+- name: Add right to access http to server
+  shell: "/usr/sbin/setsebool httpd_can_network_connect true"
+- name: Install consul
+  unarchive:
+    src: "{{ cons_url }}"
+    dest: /usr/local/bin
+    remote_src: yes
+- name: Create consul user
+  user:
+    name: consul
+- name: Create Consul /var directory
+  file:
+    path: /var/consul
+    state: directory
+    owner: consul
+    group: consul
+    mode: 0755
+- name: Create Consul config directory
+  file:
+    path: /etc/consul.d/config
+    state: directory
+    mode: 0755
+- name: Copy configuration file
+  copy:
+    src: config.json
+    dest: /etc/consul.d/config/config.json
+- name: Copy systemd consul.service
+  copy:
+    src: consul.service
+    dest: /etc/systemd/system/consul.service
+- name: Start consul service
+  systemd:
+    name: consul.service
+    state: started
+- name: Copy consul config for Nginx
+  template:
+    src: consul.cedoni.com.conf.j2
+    dest: "{{ sites_centos }}/consul.cedoni.com.conf"
+- name: Copy consul config for Nginx
+  template:
+    src: jenkins.cedoni.com.conf.j2
+    dest: "{{ sites_centos }}/jenkins.cedoni.com.conf"
+- name: Create SSL directory
+  file:
+    path: /etc/nginx/ssl
+    state: directory
+- name: Copy SSL certificate for site
+  copy:
+    src: "{{ item }}"
+    dest: /etc/nginx/ssl/
+  with_items:
+    - privkey.pem
+    - pubcert.pem
+- name: Copy sites configs for Nginx 
+  tags: cp_site
+  copy:
+    src: "{{ item }}"
+    dest: "{{ sites_centos }}"
+  with_items:
+    - pmp.by.conf
+  notify:
+    - nginx restart
