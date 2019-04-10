@@ -15,5 +15,5 @@
 ##### My IT resources on AWS
 ----------------------------
 >AWS
-![](https://github.com/ifanui/it-dev/blob/master/images/aws.pdf)
+![AWS](https://github.com/ifanui/it-dev/blob/master/images/aws.jpg)
 -----------------------------------------------------------------
