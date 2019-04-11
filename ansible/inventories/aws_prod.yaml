@@ -5,7 +5,7 @@ all:
       ansible_host: 10.10.10.5
       ansible_user: ubuntu
     jump:
-      ansible_host: 35.180.209.50
+      ansible_host: 35.180.48.207
       ansible_user: centos
     jenkins:
       ansible_host: 10.10.10.9
