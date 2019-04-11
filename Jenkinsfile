@@ -8,7 +8,7 @@ pipeline {
         }
         stage ('stop pmp service') {
             steps {
-                sh "sudo /etc/init.d/pmp-service stop"
+                sh 'sudo /etc/init.d/pmp-service stop'
             }
         }
         stage ('update') {
@@ -19,7 +19,7 @@ pipeline {
         }
         stage ('start pmp service') {
             steps {
-                sh "sudo /etc/init.d/pmp-service start"
+                sh 'sudo /etc/init.d/pmp-service start'
             }
         }
     }
