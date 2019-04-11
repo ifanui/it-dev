@@ -36,17 +36,17 @@ output "vpc-publicsubnet-ids" {
     value = "${aws_subnet.aws_subnet_public.*.id}"
 }
 
-#output "vpc-privatesubnets" {
-#    value   = "${aws_subnet.aws_subnet_private.*.cidr_block}"
-#}
+output "vpc-privatesubnets" {
+    value   = "${aws_subnet.aws_subnet_private.*.cidr_block}"
+}
 
-#output "vpc-privatesubnet-ids" {
-#    value = "${aws_subnet.aws_subnet_private.*.id}"
-#}
+output "vpc-privatesubnet-ids" {
+    value = "${aws_subnet.aws_subnet_private.*.id}"
+}
 
-#output "nat_eips" {
-#    value = ["${aws_eip.aws_eip.*.id}"]
-#}
+output "nat_eips" {
+    value = ["${aws_eip.aws_eip.*.id}"]
+}
 
 #output "natgw_ids" {
 #    value = ["${aws_nat_gateway.aws_nat_gateway.*.id}"]

@@ -45,15 +45,15 @@ resource "aws_security_group" "allow_all" {
 #---------------------------------------------------
 # Add AWS subnet (private)
 #---------------------------------------------------
-#resource "aws_subnet" "aws_subnet_private" {
-#    cidr_block              = "${var.private_sub}"
-#    vpc_id                  = "${aws_vpc.aws_vpc.id}"
-#    map_public_ip_on_launch = "false"
-#    availability_zone       = "eu-west-3a"
-#    tags {
-#        Name            = "devops_private"
-#    }
-#}
+resource "aws_subnet" "aws_subnet_private" {
+    cidr_block              = "${var.private_sub}"
+    vpc_id                  = "${aws_vpc.aws_vpc.id}"
+    map_public_ip_on_launch = "false"
+    availability_zone       = "eu-west-3a"
+    tags {
+        Name            = "devops_private"
+    }
+}
 #---------------------------------------------------
 # Add AWS subnet (public)
 #---------------------------------------------------
@@ -78,18 +78,18 @@ resource "aws_internet_gateway" "aws_internet_gateway" {
 #---------------------------------------------------
 # CREATE EIP
 #---------------------------------------------------
-#resource "aws_eip" "aws_eip" {
-#    vpc         = true
-#    depends_on = ["aws_internet_gateway.aws_internet_gateway"]
-#}
+resource "aws_eip" "aws_eip" {
+    vpc         = true
+    depends_on = ["aws_internet_gateway.aws_internet_gateway"]
+}
 #---------------------------------------------------
 # CREATE NAT
 #---------------------------------------------------
-#resource "aws_nat_gateway" "aws_nat_gateway" {
-#    allocation_id = "${aws_eip.aws_eip.id}"
-#    subnet_id = "${aws_subnet.aws_subnet_private.id}"
-#    depends_on = ["aws_internet_gateway.aws_internet_gateway"]
-#}
+resource "aws_nat_gateway" "aws_nat_gateway" {
+    allocation_id = "${aws_eip.aws_eip.id}"
+    subnet_id = "${aws_subnet.aws_subnet_public.id}"
+    depends_on = ["aws_internet_gateway.aws_internet_gateway"]
+}
 #---------------------------------------------------
 # Create public route table and the route to the internet
 #---------------------------------------------------
@@ -109,27 +109,27 @@ resource "aws_route_table" "internet_gateway" {
 ##---------------------------------------------------
 # Create private route table and the route to the internet
 #---------------------------------------------------
-#resource "aws_route_table" "nat_gateway" {
-#    vpc_id = "${aws_vpc.aws_vpc.id}"
-#    route {
-#        cidr_block = "0.0.0.0/0"
-#        gateway_id = "${aws_nat_gateway.aws_nat_gateway.id}"
-#    }
-#    tags {
-#        Name            = "devops_nat_gateway"
-#        Environment     = "${var.environment}"
-#        Orchestration   = "${var.orchestration}"
-#        Createdby       = "${var.createdby}"
-#    }
-#}
+resource "aws_route_table" "nat_gateway" {
+    vpc_id = "${aws_vpc.aws_vpc.id}"
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = "${aws_nat_gateway.aws_nat_gateway.id}"
+    }
+    tags {
+        Name            = "devops_nat_gateway"
+        Environment     = "${var.environment}"
+        Orchestration   = "${var.orchestration}"
+        Createdby       = "${var.createdby}"
+    }
+}
 #---------------------------------------------------
 # Route Table Associations
 #---------------------------------------------------
 # private
-#resource "aws_route_table_association" "aws_route_table_association_private" {
-#    subnet_id       = "${aws_subnet.aws_subnet_private.id}"
-#    route_table_id  = "${aws_route_table.nat_gateway.id}"
-#}
+resource "aws_route_table_association" "aws_route_table_association_private" {
+    subnet_id       = "${aws_subnet.aws_subnet_private.id}"
+    route_table_id  = "${aws_route_table.nat_gateway.id}"
+}
 # public
 resource "aws_route_table_association" "aws_route_table_association" {
     subnet_id       = "${aws_subnet.aws_subnet_public.id}"

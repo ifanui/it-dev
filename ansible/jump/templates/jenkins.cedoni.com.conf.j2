@@ -34,7 +34,7 @@ ssl_certificate_key /etc/nginx/ssl/privkey.pem;
     add_header X-Robots-Tag none;
 
         location / {
-            proxy_pass http://10.10.20.9:8080/;
+            proxy_pass http://10.10.10.9:8080/;
             proxy_redirect     off;
             proxy_set_header   Host             $host;
             proxy_set_header   X-Real-IP        $remote_addr;

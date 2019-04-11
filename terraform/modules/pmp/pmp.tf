@@ -20,7 +20,7 @@ resource "aws_instance" "instance" {
             delete_on_termination = true
 }
     subnet_id                   = "${var.subnet_id}"
-    private_ip                  = "10.10.20.5"
+    private_ip                  = "10.10.10.5"
     disable_api_termination     = "${var.disable_api_termination}"
     ebs_optimized               = "${var.ebs_optimized}"
     vpc_security_group_ids       = ["${var.vpc_security_group_ids}"]
@@ -30,23 +30,5 @@ resource "aws_instance" "instance" {
     Orchestration   = "${var.orchestration}"
     Createdby       = "${var.createdby}"
   }
-#############
-###Provision
-############
-connection {
-            timeout   = "2m"
-            user      = "ubuntu"
-            type = "ssh"
-            private_key = "${file("${var.private_key}")}"
-        }
-provisioner "remote-exec" {
-        inline = [
-	"sudo apt update -y",
-	"sudo apt install python-pip -y",
-	"sudo apt update -y",
-	"sudo apt install python-pip -y",
-	"sudo uname -a"
-        ]
-       }
 depends_on = ["aws_key_pair.key_pair"]
 }

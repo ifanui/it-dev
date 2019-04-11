@@ -13,7 +13,7 @@ resource "aws_instance" "instance" {
      instance_type               = "${var.ec2_instance_type}"
      key_name                    = "${aws_key_pair.key_pair.id}"
      subnet_id                   = "${var.subnet_id}"
-     private_ip                  = "10.10.20.9"
+     private_ip                  = "10.10.10.9"
      security_groups             = ["${var.vpc_security_group_ids}"]
      vpc_security_group_ids      = ["${var.vpc_security_group_ids}"]
      monitoring                  = "${var.monitoring}"
@@ -32,22 +32,5 @@ resource "aws_instance" "instance" {
         Orchestration   = "${var.orchestration}"
         Createdby       = "${var.createdby}"
     }
-    ##############################################
-    # Provisioning
-    #############################################
-     connection {
-            timeout   = "2m"
-            user      = "ubuntu"
-            type = "ssh"
-            private_key = "${file("${var.private_key}")}"
-	}
-      provisioner "remote-exec" {
-        inline = [
-            "sudo apt update -y",
-	    "sudo apt install python-pip -yq",
-	    "sudo apt update -y",
-            "sudo apt install python-pip -yq"
-        ]
-	}
-    depends_on = ["aws_key_pair.key_pair"]
+     depends_on = ["aws_key_pair.key_pair"]
 }

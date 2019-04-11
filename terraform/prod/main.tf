@@ -8,27 +8,27 @@ provider "aws" {
 }
 
 module "vpc" {
-    source                              = "../../aws/modules/vpc"
+    source                              = "../modules/vpc"
     environment                         = "dev"
 }
 module "jenkins" {
-    source                              = "../../aws/modules/jenkins"
+    source                              = "../modules/jenkins"
     environment                         = "dev"
-    subnet_id                           = "${element(module.vpc.vpc-publicsubnet-ids, 0)}"
+    subnet_id                           = "${element(module.vpc.vpc-privatesubnet-ids, 0)}"
     security_groups                     = ["${module.vpc.security_group_id}"]
     vpc_security_group_ids              = ["${module.vpc.security_group_id}"]
 }
 module "jump" {
-    source                              = "../../aws/modules/jump"
+    source                              = "../modules/jump"
     environment                         = "dev"
     subnet_id                           = "${element(module.vpc.vpc-publicsubnet-ids, 0)}"
     security_groups                     = ["${module.vpc.security_group_id}"]
     vpc_security_group_ids              = ["${module.vpc.security_group_id}"]
 }
 module "pmp" {
-    source                              = "../../aws/modules/pmp"
-    environment                         = "canvas"
-    subnet_id                           = "${element(module.vpc.vpc-publicsubnet-ids, 0)}"
+    source                              = "../modules/pmp"
+    environment                         = "dev"
+    subnet_id                           = "${element(module.vpc.vpc-privatesubnet-ids, 0)}"
     security_groups                     = ["${module.vpc.security_group_id}"]
     vpc_security_group_ids              = ["${module.vpc.security_group_id}"]
 }

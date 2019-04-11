@@ -62,7 +62,4 @@ output "tags" {
   description = "List of tags of instances"
   value       = ["${aws_instance.instance.*.tags}"]
 }
-output "public_key" {
-  description = "List of key names of instances"
-  value       = ["${aws_instance.instance.*.public_key}"]
-}
+
