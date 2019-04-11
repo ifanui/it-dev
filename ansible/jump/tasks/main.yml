@@ -37,6 +37,13 @@
   systemd:
     name: consul.service
     state: started
+- name: Copy private ssh key for ubuntu user for access remote hosts in private subnet
+  copy:
+    src: "~/.ssh/id_rsa"
+    dest: /home/centos/.ssh/id_rsa
+    owner: centos
+    group: centos
+    mode: 0600
 - name: Copy consul config for Nginx
   template:
     src: consul.cedoni.com.conf.j2
