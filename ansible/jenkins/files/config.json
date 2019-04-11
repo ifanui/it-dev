@@ -24,9 +24,9 @@
     "address": "",
     "checks": [{
       "id": "Jenkins-status",
-      "http": "http://127.0.0.1:8080",
-      "tls_skip_verify": true,
-      "interval": "15s"
+      "tcp": "localhost:8080",
+      "interval": "10s",
+      "timeout": "1s"
     }]
   }]
 } 
